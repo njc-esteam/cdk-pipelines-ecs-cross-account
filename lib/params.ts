@@ -1,5 +1,5 @@
 export const Params = {
-    GITHUB_REPO: "njc-esteam/es-test-pipeline",
+    GITHUB_REPO: "njc-esteam/cdk-pipelines-ecs-cross-account",
     BRANCH_NAME: "main",
     GITHUB_TOKEN: "GitHubToken",
     AWS_REGION_STAGING: "us-west-2",
