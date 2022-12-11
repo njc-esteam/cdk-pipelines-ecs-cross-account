@@ -59,10 +59,6 @@ export class CdkPipelineStack extends Stack {
     // }));
     
     const pipelineProdStage = pipeline.addStage(prodStage);   
-    pipelineDevStage.addPost(new ShellStep("albTestp", {
-      envFromCfnOutputs: {albAddress: prodStage.albAddress},
-      commands: ['curl -f -s -o /dev/null -w "%{http_code}" $albAddress']
-    }));
 
     pipelineProdStage.addPre(new ManualApprovalStep('ManualApproval', {}));
 
