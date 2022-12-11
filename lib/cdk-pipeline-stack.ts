@@ -27,14 +27,14 @@ export class CdkPipelineStack extends Stack {
       bg: '#FF0000'
     });
 
-    const stagingStage = new BaseStage(this, 'StagingStage', {
-      env: {
-        account: Params.STAGING_ACCOUNT_ID,
-        region: Params.AWS_REGION_STAGING
-      },
-      customGreeting: 'Hi from Staging account',
-      bg: '#00FF00'
-    });
+    // const stagingStage = new BaseStage(this, 'StagingStage', {
+    //   env: {
+    //     account: Params.STAGING_ACCOUNT_ID,
+    //     region: Params.AWS_REGION_STAGING
+    //   },
+    //   customGreeting: 'Hi from Staging account',
+    //   bg: '#00FF00'
+    // });
 
     const prodStage = new BaseStage(this, 'ProdStage', {
       env: {
@@ -47,18 +47,22 @@ export class CdkPipelineStack extends Stack {
     
 
     const pipelineDevStage = pipeline.addStage(devStage);
-    pipelineDevStage.addPost(new ShellStep("albTest", {
+    pipelineDevStage.addPost(new ShellStep("albTestd", {
       envFromCfnOutputs: {albAddress: devStage.albAddress},
       commands: ['curl -f -s -o /dev/null -w "%{http_code}" $albAddress']
     }));
 
-    const pipelineStagingStage = pipeline.addStage(stagingStage);
-    pipelineStagingStage.addPost(new ShellStep("albTest", {
-      envFromCfnOutputs: {albAddress: stagingStage.albAddress},
-      commands: ['curl -f -s -o /dev/null -w "%{http_code}" $albAddress']
-    }));
+    // const pipelineStagingStage = pipeline.addStage(stagingStage);
+    // pipelineStagingStage.addPost(new ShellStep("albTest", {
+    //   envFromCfnOutputs: {albAddress: stagingStage.albAddress},
+    //   commands: ['curl -f -s -o /dev/null -w "%{http_code}" $albAddress']
+    // }));
     
     const pipelineProdStage = pipeline.addStage(prodStage);   
+    pipelineDevStage.addPost(new ShellStep("albTestp", {
+      envFromCfnOutputs: {albAddress: prodStage.albAddress},
+      commands: ['curl -f -s -o /dev/null -w "%{http_code}" $albAddress']
+    }));
 
     pipelineProdStage.addPre(new ManualApprovalStep('ManualApproval', {}));
 
