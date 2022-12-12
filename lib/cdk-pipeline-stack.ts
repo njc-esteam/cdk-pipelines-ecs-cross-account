@@ -49,7 +49,7 @@ export class CdkPipelineStack extends Stack {
     const pipelineDevStage = pipeline.addStage(devStage);
     pipelineDevStage.addPost(new ShellStep("albTestd", {
       envFromCfnOutputs: {albAddress: devStage.albAddress},
-      commands: ['curl -f -s -o /dev/null -w "%{http_code}" $albAddress']
+      commands: ['curl -f -s -o /dev/null -w "%{http_code}" $albAddress'] 
     }));
 
     // const pipelineStagingStage = pipeline.addStage(stagingStage);
